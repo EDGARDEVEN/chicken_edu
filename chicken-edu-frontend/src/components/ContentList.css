@@ -1,0 +1,15 @@
+.content-list {
+    width: 80%;
+    margin: 50px auto;
+}
+
+.content-item {
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.content-item h3 {
+    margin-top: 0;
+}
