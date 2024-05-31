@@ -14,6 +14,9 @@ function Login() {
         })
         .then(response => {
             console.log(response.data);
+            if (response.data.message === 'Login successful') {
+                localStorage.setItem('user', JSON.stringify(response.data));
+            }
         })
         .catch(error => {
             console.error('There was an error!', error);
