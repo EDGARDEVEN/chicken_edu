@@ -41,7 +41,7 @@ class ContentList(Resource):
 class QuizList(Resource):
     def get(self):
         quizzes = Quiz.query.all()
-        return jsonify([{'id': quiz.id, 'question': quiz.question} for quiz in quizzes])
+        return jsonify([{'id': quiz.id, 'question': quiz.question, 'choices': quiz.choices} for quiz in quizzes])
 
 class SubmitQuiz(Resource):
     def post(self):
@@ -53,7 +53,7 @@ class SubmitQuiz(Resource):
         if not quiz:
             return {'message': 'Quiz not found'}, 404
 
-        is_correct = (quiz.answer == data['answer'])
+        is_correct = (quiz.correct_answer == data['answer'])
         score = 1 if is_correct else 0
         new_progress = UserProgress(
             user_id=user.id,
@@ -61,6 +61,7 @@ class SubmitQuiz(Resource):
             score=score
         )
         user.points += score
+        user.progress += 1  # Increment progress for each quiz taken
         db.session.add(new_progress)
         db.session.commit()
         return {'message': 'Quiz submitted successfully', 'correct': is_correct}

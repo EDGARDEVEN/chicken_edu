@@ -24,7 +24,8 @@ class Content(db.Model):
 class Quiz(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     question = db.Column(db.String(200), nullable=False)
-    answer = db.Column(db.String(200), nullable=False)
+    choices = db.Column(db.JSON, nullable=False)
+    correct_answer = db.Column(db.String(200), nullable=False)
 
 class UserProgress(db.Model):
     id = db.Column(db.Integer, primary_key=True)

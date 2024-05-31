@@ -5,7 +5,7 @@ import './QuizList.css';
 function QuizList() {
     const [quizzes, setQuizzes] = useState([]);
     const [selectedQuiz, setSelectedQuiz] = useState(null);
-    const [answer, setAnswer] = useState('');
+    const [selectedChoice, setSelectedChoice] = useState('');
     const [result, setResult] = useState(null);
 
     useEffect(() => {
@@ -20,7 +20,7 @@ function QuizList() {
 
     const handleQuizSelect = (quiz) => {
         setSelectedQuiz(quiz);
-        setAnswer('');
+        setSelectedChoice('');
         setResult(null);
     };
 
@@ -30,7 +30,7 @@ function QuizList() {
         axios.post('http://localhost:5000/api/submit_quiz', {
             user_id: user.user_id,
             quiz_id: selectedQuiz.id,
-            answer: answer
+            answer: selectedChoice
         })
         .then(response => {
             setResult(response.data);
@@ -54,7 +54,18 @@ function QuizList() {
                 <div className="quiz-detail">
                     <h3>{selectedQuiz.question}</h3>
                     <form onSubmit={handleSubmit}>
-                        <input type="text" value={answer} onChange={(e) => setAnswer(e.target.value)} />
+                        {selectedQuiz.choices.map((choice, index) => (
+                            <div key={index}>
+                                <input
+                                    type="radio"
+                                    name="choice"
+                                    value={choice}
+                                    checked={selectedChoice === choice}
+                                    onChange={(e) => setSelectedChoice(e.target.value)}
+                                />
+                                {choice}
+                            </div>
+                        ))}
                         <button type="submit">Submit Answer</button>
                     </form>
                     {result && (
