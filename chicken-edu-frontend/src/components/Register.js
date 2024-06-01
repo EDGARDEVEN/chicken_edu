@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './Form.css';
+import { useHistory } from 'react-router-dom';
 
 function Register() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
+    const history = useHistory();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -17,6 +19,7 @@ function Register() {
         })
         .then(response => {
             setMessage(response.data.message);
+            history.push('/login');
         })
         .catch(error => {
             setMessage('There was an error!');

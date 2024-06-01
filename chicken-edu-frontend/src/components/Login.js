@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './Form.css';
+import { useHistory } from 'react-router-dom';
 
 function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
+    const history = useHistory();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -17,6 +19,7 @@ function Login() {
             setMessage(response.data.message);
             if (response.data.message === 'Login successful') {
                 localStorage.setItem('user', JSON.stringify(response.data));
+                history.push('/');
             }
         })
         .catch(error => {

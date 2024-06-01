@@ -54,6 +54,12 @@ def generate_chicken_quizzes():
     ]
     return quizzes
 
+def clear_existing_data():
+    with app.app_context():
+        db.session.query(Content).delete()
+        db.session.query(Quiz).delete()
+        db.session.commit()
+
 def populate_database(content_data, quizzes_data):
     with app.app_context():
         db.create_all()
@@ -75,6 +81,7 @@ def populate_database(content_data, quizzes_data):
         db.session.commit()
 
 if __name__ == '__main__':
+    clear_existing_data()
     content_data = fetch_wikipedia_articles()
     quizzes_data = generate_chicken_quizzes()
     populate_database(content_data, quizzes_data)
