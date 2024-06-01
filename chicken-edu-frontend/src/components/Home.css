@@ -1,14 +1,16 @@
-.content-list {
-    padding: 20px;
+.home {
+    padding: 40px 20px;
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.content-item {
+.home h1 {
     margin-bottom: 20px;
 }
 
-.content-item h3 {
-    margin-top: 0;
+.home p {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 15px;
 }

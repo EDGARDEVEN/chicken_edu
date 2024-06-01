@@ -1,25 +1,25 @@
 .App {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
   text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+nav {
+  background-color: #007bff;
+  padding: 10px 0;
 }
 
 nav ul {
-  list-style: none;
-  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 nav ul li {
-  display: inline;
-  margin: 0 10px;
+  margin: 0 15px;
 }
 
 nav ul li a {
-  text-decoration: none;
-  color: #007BFF;
-}
-
-nav ul li a:hover {
-  text-decoration: underline;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
 }

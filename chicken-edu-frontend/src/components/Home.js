@@ -1,4 +1,6 @@
 import React from 'react';
+import '@babel/template'
+import './Home.css';
 
 function Home() {
     return (

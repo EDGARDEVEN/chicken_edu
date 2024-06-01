@@ -5,6 +5,7 @@ import './Form.css';
 function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [message, setMessage] = useState('');
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -13,13 +14,13 @@ function Login() {
             password
         })
         .then(response => {
-            console.log(response.data);
+            setMessage(response.data.message);
             if (response.data.message === 'Login successful') {
                 localStorage.setItem('user', JSON.stringify(response.data));
             }
         })
         .catch(error => {
-            console.error('There was an error!', error);
+            setMessage('There was an error!');
         });
     };
 
@@ -33,6 +34,7 @@ function Login() {
                 <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                 <button type="submit">Login</button>
             </form>
+            {message && <p>{message}</p>}
         </div>
     );
 }

@@ -7,6 +7,7 @@ import ContentList from './components/ContentList';
 import QuizList from './components/QuizList';
 import UserProgress from './components/UserProgress';
 import './App.css';
+import './styles/global.css'
 
 function App() {
     return (

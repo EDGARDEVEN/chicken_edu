@@ -6,6 +6,7 @@ function Register() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [message, setMessage] = useState('');
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -15,10 +16,10 @@ function Register() {
             password
         })
         .then(response => {
-            console.log(response.data);
+            setMessage(response.data.message);
         })
         .catch(error => {
-            console.error('There was an error!', error);
+            setMessage('There was an error!');
         });
     };
 
@@ -34,6 +35,7 @@ function Register() {
                 <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                 <button type="submit">Register</button>
             </form>
+            {message && <p>{message}</p>}
         </div>
     );
 }

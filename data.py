@@ -4,24 +4,55 @@ from app.models import Content, Quiz
 
 app = create_app()
 
-def fetch_external_data():
-    # Fetch quizzes from Open Trivia Database
-    quizzes_url = 'https://opentdb.com/api.php?amount=10&type=multiple'
-    quizzes_response = requests.get(quizzes_url)
-    quizzes_data = quizzes_response.json()['results']
+def fetch_wikipedia_articles():
+    articles = []
+    search_url = 'https://en.wikipedia.org/w/api.php'
+    for _ in range(5):  # Fetch 5 articles
+        params = {
+            'action': 'query',
+            'format': 'json',
+            'list': 'search',
+            'srsearch': 'chicken',
+            'srlimit': 1,
+        }
+        response = requests.get(search_url, params=params)
+        data = response.json()
+        if data['query']['search']:
+            page = data['query']['search'][0]
+            title = page['title']
+            snippet = page['snippet']
+            articles.append({'title': title, 'body': snippet})
+    return articles
 
-    # Fetch content from Wikipedia
-    content_data = []
-    for _ in range(5):  # Fetch 5 random articles
-        content_url = 'https://en.wikipedia.org/api/rest_v1/page/random/summary'
-        content_response = requests.get(content_url)
-        content = content_response.json()
-        content_data.append({
-            'title': content['title'],
-            'body': content['extract']
-        })
-
-    return content_data, quizzes_data
+def generate_chicken_quizzes():
+    quizzes = [
+        {
+            'question': 'What is a chicken?',
+            'choices': ['A type of bird', 'A type of fish', 'A type of mammal', 'A type of reptile'],
+            'correct_answer': 'A type of bird'
+        },
+        {
+            'question': 'What do chickens primarily eat?',
+            'choices': ['Meat', 'Grains', 'Grass', 'Insects'],
+            'correct_answer': 'Grains'
+        },
+        {
+            'question': 'How many eggs does a chicken lay per year on average?',
+            'choices': ['50', '150', '250', '350'],
+            'correct_answer': '250'
+        },
+        {
+            'question': 'Which part of a chicken is called a "comb"?',
+            'choices': ['Leg', 'Wing', 'Head', 'Tail'],
+            'correct_answer': 'Head'
+        },
+        {
+            'question': 'What is the name of a young chicken?',
+            'choices': ['Pullet', 'Chick', 'Rooster', 'Hen'],
+            'correct_answer': 'Chick'
+        }
+    ]
+    return quizzes
 
 def populate_database(content_data, quizzes_data):
     with app.app_context():
@@ -34,10 +65,9 @@ def populate_database(content_data, quizzes_data):
 
         # Populate quizzes
         for quiz in quizzes_data:
-            choices = quiz['incorrect_answers'] + [quiz['correct_answer']]
             new_quiz = Quiz(
                 question=quiz['question'],
-                choices=choices,
+                choices=quiz['choices'],
                 correct_answer=quiz['correct_answer']
             )
             db.session.add(new_quiz)
@@ -45,5 +75,7 @@ def populate_database(content_data, quizzes_data):
         db.session.commit()
 
 if __name__ == '__main__':
-    content_data, quizzes_data = fetch_external_data()
+    content_data = fetch_wikipedia_articles()
+    quizzes_data = generate_chicken_quizzes()
     populate_database(content_data, quizzes_data)
+    print('Database populated successfully')
