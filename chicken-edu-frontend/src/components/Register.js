@@ -22,23 +22,29 @@ function Register() {
             history.push('/login');
         })
         .catch(error => {
-            setMessage('There was an error!');
+            setMessage('User already Exists');
         });
     };
 
     return (
-        <div className="form-container">
+        <div className="form-container container mt-5">
             <h2>Register</h2>
             <form onSubmit={handleSubmit}>
-                <label>Username:</label>
-                <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-                <label>Email:</label>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                <label>Password:</label>
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                <button type="submit">Register</button>
+                <div className="form-group">
+                    <label>Username:</label>
+                    <input type="text" className="form-control" value={username} onChange={(e) => setUsername(e.target.value)} />
+                </div>
+                <div className="form-group">
+                    <label>Email:</label>
+                    <input type="email" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} />
+                </div>
+                <div className="form-group">
+                    <label>Password:</label>
+                    <input type="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} />
+                </div>
+                <button type="submit" className="btn btn-primary btn-block">Register</button>
             </form>
-            {message && <p>{message}</p>}
+            {message && <div className="alert alert-info mt-3">{message}</div>}
         </div>
     );
 }

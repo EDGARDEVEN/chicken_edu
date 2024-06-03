@@ -41,36 +41,41 @@ function QuizList() {
     };
 
     return (
-        <div className="quiz-list">
+        <div className="quiz-list container mt-5">
             <h2>Quizzes</h2>
-            <ul>
+            <ul className="list-group">
                 {quizzes.map(quiz => (
-                    <li key={quiz.id} onClick={() => handleQuizSelect(quiz)}>
+                    <li key={quiz.id} className="list-group-item" onClick={() => handleQuizSelect(quiz)}>
                         {quiz.question}
                     </li>
                 ))}
             </ul>
             {selectedQuiz && (
-                <div className="quiz-detail">
-                    <h3>{selectedQuiz.question}</h3>
-                    <form onSubmit={handleSubmit}>
-                        {selectedQuiz.choices.map((choice, index) => (
-                            <div key={index}>
-                                <input
-                                    type="radio"
-                                    name="choice"
-                                    value={choice}
-                                    checked={selectedChoice === choice}
-                                    onChange={(e) => setSelectedChoice(e.target.value)}
-                                />
-                                {choice}
+                <div className="quiz-detail card mt-3">
+                    <div className="card-body">
+                        <h3 className="card-title">{selectedQuiz.question}</h3>
+                        <form onSubmit={handleSubmit}>
+                            {selectedQuiz.choices.map((choice, index) => (
+                                <div key={index} className="form-check">
+                                    <input
+                                        type="radio"
+                                        name="choice"
+                                        value={choice}
+                                        checked={selectedChoice === choice}
+                                        onChange={(e) => setSelectedChoice(e.target.value)}
+                                        className="form-check-input"
+                                    />
+                                    <label className="form-check-label">{choice}</label>
+                                </div>
+                            ))}
+                            <button type="submit" className="btn btn-primary btn-block mt-3">Submit Answer</button>
+                        </form>
+                        {result && (
+                            <div className={`alert mt-3 ${result.correct ? 'alert-success' : 'alert-danger'}`}>
+                                {result.correct ? 'Correct!' : 'Incorrect.'}
                             </div>
-                        ))}
-                        <button type="submit">Submit Answer</button>
-                    </form>
-                    {result && (
-                        <p>{result.correct ? 'Correct!' : 'Incorrect.'}</p>
-                    )}
+                        )}
+                    </div>
                 </div>
             )}
         </div>

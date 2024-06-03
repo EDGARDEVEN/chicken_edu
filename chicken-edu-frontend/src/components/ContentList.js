@@ -16,12 +16,14 @@ function ContentList() {
     }, []);
 
     return (
-        <div className="content-list">
+        <div className="content-list container mt-5">
             <h2>Educational Contents</h2>
             {contents.map(content => (
-                <div key={content.id} className="content-item">
-                    <h3>{content.title}</h3>
-                    <p>{content.body}</p>
+                <div key={content.id} className="content-item card mb-3">
+                    <div className="card-body">
+                        <h3 className="card-title">{content.title}</h3>
+                        <p className="card-text">{content.body}</p>
+                    </div>
                 </div>
             ))}
         </div>
