@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Container, Box, Typography, Card, CardContent, Button, Radio, RadioGroup, FormControlLabel } from '@mui/material';
+import { Container, Box, Typography, Card, CardContent, Button, Radio, RadioGroup, FormControlLabel, Snackbar, Alert } from '@mui/material';
 import './QuizList.css';
 
 function QuizList() {
@@ -8,6 +8,9 @@ function QuizList() {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedChoice, setSelectedChoice] = useState('');
     const [result, setResult] = useState(null);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarSeverity, setSnackbarSeverity] = useState('success');
 
     useEffect(() => {
         axios.get('http://localhost:5000/api/quizzes')
@@ -33,6 +36,14 @@ function QuizList() {
         })
         .then(response => {
             setResult(response.data);
+            if (response.data.correct) {
+                setSnackbarMessage('Yes, That Is Correct!');
+                setSnackbarSeverity('success');
+            } else {
+                setSnackbarMessage('Sorry, that is incorrect. Please try again.');
+                setSnackbarSeverity('error');
+            }
+            setOpenSnackbar(true);
         })
         .catch(error => {
             console.error('There was an error!', error);
@@ -43,12 +54,18 @@ function QuizList() {
         setSelectedChoice('');
         setResult(null);
         setCurrentQuestionIndex(currentQuestionIndex + 1);
+        setOpenSnackbar(false);
     };
 
     const handlePrevQuestion = () => {
         setSelectedChoice('');
         setResult(null);
         setCurrentQuestionIndex(currentQuestionIndex - 1);
+        setOpenSnackbar(false);
+    };
+
+    const handleCloseSnackbar = () => {
+        setOpenSnackbar(false);
     };
 
     return (
@@ -90,6 +107,16 @@ function QuizList() {
                     </Card>
                 )}
             </Box>
+            <Snackbar 
+                open={openSnackbar} 
+                autoHideDuration={6000} 
+                onClose={handleCloseSnackbar}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
+                    {snackbarMessage}
+                </Alert>
+            </Snackbar>
         </Container>
     );
 }
