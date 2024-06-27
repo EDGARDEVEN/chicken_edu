@@ -1,5 +1,5 @@
-import requests
 import random
+import requests
 from app import create_app, db
 from app.models import Content, Quiz
 
@@ -9,23 +9,38 @@ def fetch_wikipedia_articles():
     articles = []
     search_url = 'https://en.wikipedia.org/w/api.php'
     search_terms = ['poultry keeping', 'chicken farming', 'egg production', 'broiler chickens', 'free-range chickens']
-    
-    for _ in range(15):  # Fetch 15 articles
+
+    for _ in range(5):  # Fetch 5 articles
         search_term = random.choice(search_terms)
-        params = {
+        search_params = {
             'action': 'query',
             'format': 'json',
             'list': 'search',
             'srsearch': search_term,
             'srlimit': 1,
         }
-        response = requests.get(search_url, params=params)
-        data = response.json()
-        if data['query']['search']:
-            page = data['query']['search'][0]
+        search_response = requests.get(search_url, params=search_params)
+        search_data = search_response.json()
+
+        if search_data['query']['search']:
+            page = search_data['query']['search'][0]
             title = page['title']
-            snippet = page['snippet']
-            articles.append({'title': title, 'body': snippet})
+            
+            content_params = {
+                'action': 'query',
+                'format': 'json',
+                'prop': 'extracts',
+                'explaintext': True,
+                'titles': title,
+            }
+            content_response = requests.get(search_url, params=content_params)
+            content_data = content_response.json()
+            
+            page_id = next(iter(content_data['query']['pages']))
+            if page_id != '-1':
+                content = content_data['query']['pages'][page_id]
+                articles.append({'title': content['title'], 'body': content['extract']})
+    
     return articles
 
 def generate_chicken_quizzes():
