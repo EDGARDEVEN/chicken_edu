@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './Form.css';
+import { Container, Box, Typography, Avatar, TextField, Button, Grid, Link } from '@mui/material';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useHistory } from 'react-router-dom';
+import './Form.css';
 
-function Register() {
+const theme = createTheme();
+
+export default function Register() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -22,31 +27,92 @@ function Register() {
             history.push('/login');
         })
         .catch(error => {
-            setMessage('User already Exists');
+            setMessage('There was an error!');
         });
     };
 
     return (
-        <div className="form-container container mt-5">
-            <h2>Register</h2>
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label>Username:</label>
-                    <input type="text" className="form-control" value={username} onChange={(e) => setUsername(e.target.value)} />
-                </div>
-                <div className="form-group">
-                    <label>Email:</label>
-                    <input type="email" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} />
-                </div>
-                <div className="form-group">
-                    <label>Password:</label>
-                    <input type="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} />
-                </div>
-                <button type="submit" className="btn btn-primary btn-block">Register</button>
-            </form>
-            {message && <div className="alert alert-info mt-3">{message}</div>}
-        </div>
+        <ThemeProvider theme={theme}>
+            <Container component="main" maxWidth="xs">
+                <Box
+                    sx={{
+                        marginTop: 8,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Register
+                    </Typography>
+                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    autoComplete="username"
+                                    name="username"
+                                    required
+                                    fullWidth
+                                    id="username"
+                                    label="Username"
+                                    autoFocus
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    id="email"
+                                    label="Email Address"
+                                    name="email"
+                                    autoComplete="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    id="password"
+                                    autoComplete="new-password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                            </Grid>
+                        </Grid>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                        >
+                            Register
+                        </Button>
+                        <Grid container justifyContent="flex-end">
+                            <Grid item>
+                                <Link href="/login" variant="body2">
+                                    Already have an account? Sign in
+                                </Link>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Box>
+                {message && (
+                    <Typography variant="body2" color="error" align="center" sx={{ mt: 2 }}>
+                        {message}
+                    </Typography>
+                )}
+            </Container>
+        </ThemeProvider>
     );
 }
-
-export default Register;
+ 

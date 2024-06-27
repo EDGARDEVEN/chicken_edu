@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Container, Box, Typography, Card, CardContent, Button, Radio, RadioGroup, FormControlLabel } from '@mui/material';
 import './QuizList.css';
 
 function QuizList() {
     const [quizzes, setQuizzes] = useState([]);
-    const [selectedQuiz, setSelectedQuiz] = useState(null);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedChoice, setSelectedChoice] = useState('');
     const [result, setResult] = useState(null);
 
@@ -18,10 +19,8 @@ function QuizList() {
             });
     }, []);
 
-    const handleQuizSelect = (quiz) => {
-        setSelectedQuiz(quiz);
-        setSelectedChoice('');
-        setResult(null);
+    const handleChoiceChange = (event) => {
+        setSelectedChoice(event.target.value);
     };
 
     const handleSubmit = (event) => {
@@ -29,7 +28,7 @@ function QuizList() {
         const user = JSON.parse(localStorage.getItem('user'));
         axios.post('http://localhost:5000/api/submit_quiz', {
             user_id: user.user_id,
-            quiz_id: selectedQuiz.id,
+            quiz_id: quizzes[currentQuestionIndex].id,
             answer: selectedChoice
         })
         .then(response => {
@@ -40,45 +39,58 @@ function QuizList() {
         });
     };
 
+    const handleNextQuestion = () => {
+        setSelectedChoice('');
+        setResult(null);
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+    };
+
+    const handlePrevQuestion = () => {
+        setSelectedChoice('');
+        setResult(null);
+        setCurrentQuestionIndex(currentQuestionIndex - 1);
+    };
+
     return (
-        <div className="quiz-list container mt-5">
-            <h2>Quizzes</h2>
-            <ul className="list-group">
-                {quizzes.map(quiz => (
-                    <li key={quiz.id} className="list-group-item" onClick={() => handleQuizSelect(quiz)}>
-                        {quiz.question}
-                    </li>
-                ))}
-            </ul>
-            {selectedQuiz && (
-                <div className="quiz-detail card mt-3">
-                    <div className="card-body">
-                        <h3 className="card-title">{selectedQuiz.question}</h3>
-                        <form onSubmit={handleSubmit}>
-                            {selectedQuiz.choices.map((choice, index) => (
-                                <div key={index} className="form-check">
-                                    <input
-                                        type="radio"
-                                        name="choice"
-                                        value={choice}
-                                        checked={selectedChoice === choice}
-                                        onChange={(e) => setSelectedChoice(e.target.value)}
-                                        className="form-check-input"
-                                    />
-                                    <label className="form-check-label">{choice}</label>
-                                </div>
-                            ))}
-                            <button type="submit" className="btn btn-primary btn-block mt-3">Submit Answer</button>
-                        </form>
-                        {result && (
-                            <div className={`alert mt-3 ${result.correct ? 'alert-success' : 'alert-danger'}`}>
-                                {result.correct ? 'Correct!' : 'Incorrect.'}
-                            </div>
-                        )}
-                    </div>
-                </div>
-            )}
-        </div>
+        <Container component="main" maxWidth="md">
+            <Box sx={{ marginTop: 8 }}>
+                <Typography variant="h4" align="center" gutterBottom>
+                    Quizzes
+                </Typography>
+                {quizzes.length > 0 && (
+                    <Card className="quiz-card">
+                        <CardContent>
+                            <Typography variant="h5" component="div">
+                                {quizzes[currentQuestionIndex].question}
+                            </Typography>
+                            <form onSubmit={handleSubmit}>
+                                <RadioGroup value={selectedChoice} onChange={handleChoiceChange}>
+                                    {quizzes[currentQuestionIndex].choices.map((choice, index) => (
+                                        <FormControlLabel key={index} value={choice} control={<Radio />} label={choice} />
+                                    ))}
+                                </RadioGroup>
+                                {result && (
+                                    <Typography variant="body2" color={result.correct ? 'green' : 'red'}>
+                                        {result.correct ? 'Correct!' : 'Incorrect.'}
+                                    </Typography>
+                                )}
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+                                    <Button variant="contained" color="primary" disabled={currentQuestionIndex === 0} onClick={handlePrevQuestion}>
+                                        Previous
+                                    </Button>
+                                    <Button variant="contained" color="secondary" type="submit">
+                                        Submit
+                                    </Button>
+                                    <Button variant="contained" color="primary" disabled={currentQuestionIndex === quizzes.length - 1} onClick={handleNextQuestion}>
+                                        Next
+                                    </Button>
+                                </Box>
+                            </form>
+                        </CardContent>
+                    </Card>
+                )}
+            </Box>
+        </Container>
     );
 }
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Container, Box, Typography, Card, CardContent } from '@mui/material';
 import './ContentList.css';
 
 function ContentList() {
@@ -16,17 +17,25 @@ function ContentList() {
     }, []);
 
     return (
-        <div className="content-list container mt-5">
-            <h2>Educational Contents</h2>
-            {contents.map(content => (
-                <div key={content.id} className="content-item card mb-3">
-                    <div className="card-body">
-                        <h3 className="card-title">{content.title}</h3>
-                        <p className="card-text">{content.body}</p>
-                    </div>
-                </div>
-            ))}
-        </div>
+        <Container component="main" maxWidth="md">
+            <Box sx={{ marginTop: 8 }}>
+                <Typography variant="h4" align="center" gutterBottom>
+                    Educational Content On Poultry
+                </Typography>
+                {contents.map((content, index) => (
+                    <Card key={index} className="content-card" sx={{ marginBottom: 2 }}>
+                        <CardContent>
+                            <Typography variant="h5" component="div">
+                                {content.title}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary" component="p">
+                                <span dangerouslySetInnerHTML={{ __html: content.body }} />
+                            </Typography>
+                        </CardContent>
+                    </Card>
+                ))}
+            </Box>
+        </Container>
     );
 }
 

@@ -7,6 +7,16 @@ import ContentList from './components/ContentList';
 import QuizList from './components/QuizList';
 import UserProgress from './components/UserProgress';
 import Logout from './components/Logout';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import MenuIcon from '@mui/icons-material/Menu';
+import HomeIcon from '@mui/icons-material/Home';
+import SchoolIcon from '@mui/icons-material/School';
+import QuizIcon from '@mui/icons-material/Quiz';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LoginIcon from '@mui/icons-material/Login';
 import './App.css';
 import './styles/global.css';
 
@@ -16,17 +26,58 @@ function App() {
     return (
         <Router>
             <div className="App">
-                <nav>
-                    <ul>
-                        <li><Link to="/">Home</Link></li>
-                        {!user && <li><Link to="/register">Register</Link></li>}
-                        {!user && <li><Link to="/login">Login</Link></li>}
-                        {user && <li><Link to="/contents">Contents</Link></li>}
-                        {user && <li><Link to="/quizzes">Quizzes</Link></li>}
-                        {user && <li><Link to="/user_progress">Progress</Link></li>}
-                        {user && <li><Logout /></li>}
-                    </ul>
-                </nav>
+                <AppBar position="static">
+                    <Toolbar>
+                        <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                            Poultry Education System
+                        </Typography>
+                        <Link to="/" className="nav-link">
+                            <IconButton color="inherit">
+                                <HomeIcon />
+                            </IconButton>
+                            Home
+                        </Link>
+                        {!user && (
+                            <>
+                                <Link to="/register" className="nav-link">
+                                    <IconButton color="inherit">
+                                        <AccountCircleIcon />
+                                    </IconButton>
+                                    Register
+                                </Link>
+                                <Link to="/login" className="nav-link">
+                                    <IconButton color="inherit">
+                                        <LoginIcon />
+                                    </IconButton>
+                                    Login
+                                </Link>
+                            </>
+                        )}
+                        {user && (
+                            <>
+                                <Link to="/contents" className="nav-link">
+                                    <IconButton color="inherit">
+                                        <SchoolIcon />
+                                    </IconButton>
+                                </Link>
+                                <Link to="/quizzes" className="nav-link">
+                                    <IconButton color="inherit">
+                                        <QuizIcon />
+                                    </IconButton>
+                                </Link>
+                                <Link to="/user_progress" className="nav-link">
+                                    <IconButton color="inherit">
+                                        <AccountCircleIcon />
+                                    </IconButton>
+                                </Link>
+                                <Logout />
+                            </>
+                        )}
+                    </Toolbar>
+                </AppBar>
                 <div className="container">
                     <Switch>
                         <Route path="/" exact component={Home} />
