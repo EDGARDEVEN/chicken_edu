@@ -13,8 +13,17 @@ function UserProgress() {
         const user = JSON.parse(localStorage.getItem('user'));
         axios.get(`http://localhost:5000/api/user_progress/${user.user_id}`)
             .then(response => {
-                setProgress(response.data);
-                const points = response.data.reduce((total, item) => total + item.score, 0);
+                const progressData = response.data;
+                // Use a map to track the highest score for each quiz
+                const quizMap = new Map();
+                progressData.forEach(item => {
+                    if (!quizMap.has(item.quiz_id) || quizMap.get(item.quiz_id).score < item.score) {
+                        quizMap.set(item.quiz_id, item);
+                    }
+                });
+                const uniqueProgress = Array.from(quizMap.values());
+                setProgress(uniqueProgress);
+                const points = uniqueProgress.reduce((total, item) => total + item.score, 0);
                 setTotalPoints(points);
             })
             .catch(error => {
