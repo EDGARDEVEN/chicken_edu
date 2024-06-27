@@ -62,16 +62,19 @@ function App() {
                                     <IconButton color="inherit">
                                         <SchoolIcon />
                                     </IconButton>
+                                    Contents
                                 </Link>
                                 <Link to="/quizzes" className="nav-link">
                                     <IconButton color="inherit">
                                         <QuizIcon />
                                     </IconButton>
+                                    Quizzes
                                 </Link>
                                 <Link to="/user_progress" className="nav-link">
                                     <IconButton color="inherit">
                                         <AccountCircleIcon />
                                     </IconButton>
+                                    User Progress
                                 </Link>
                                 <Logout />
                             </>
