@@ -10,8 +10,12 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { Alert, AlertTitle } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useHistory } from 'react-router-dom';
+import Lottie from 'react-lottie';
+import errorAnimation from '../animations/chicken.json';  // Add your Lottie animation file here
+
 
 const theme = createTheme();
 
@@ -20,7 +24,7 @@ function Copyright(props) {
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="localhost:3000">
-        Your Website
+        Poultry Education
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -32,6 +36,8 @@ export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
   const history = useHistory();
 
   const handleSubmit = (event) => {
@@ -44,12 +50,30 @@ export default function Login() {
       setMessage(response.data.message);
       if (response.data.message === 'Login successful') {
         localStorage.setItem('user', JSON.stringify(response.data));
-        history.push('/');
+        setSuccess(true);
+        setError(false);
+        setTimeout(() => {
+          history.push('/');
+        }, 2000);
+      } else {
+        setSuccess(false);
+        setError(true);
       }
     })
     .catch(error => {
       setMessage('There was an error!');
+      setSuccess(false);
+      setError(true);
     });
+  };
+
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: errorAnimation,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice'
+    }
   };
 
   return (
@@ -103,6 +127,18 @@ export default function Login() {
             >
               Sign In
             </Button>
+            {success && (
+              <Alert severity="success">
+                <AlertTitle>Success</AlertTitle>
+                {message}
+              </Alert>
+            )}
+            {error && (
+              <Alert severity="error" icon={<Lottie options={defaultOptions} height={50} width={50} />}>
+                <AlertTitle>Error</AlertTitle>
+                {message}
+              </Alert>
+            )}
             <Grid container>
               <Grid item>
                 <Link href="/register" variant="body2">
@@ -112,11 +148,6 @@ export default function Login() {
             </Grid>
           </Box>
         </Box>
-        {message && (
-          <Typography variant="body2" color="error" align="center" sx={{ mt: 2 }}>
-            {message}
-          </Typography>
-        )}
         <Copyright sx={{ mt: 5 }} />
       </Container>
     </ThemeProvider>
