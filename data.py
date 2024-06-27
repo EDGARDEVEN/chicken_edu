@@ -1,4 +1,5 @@
 import requests
+import random
 from app import create_app, db
 from app.models import Content, Quiz
 
@@ -7,12 +8,15 @@ app = create_app()
 def fetch_wikipedia_articles():
     articles = []
     search_url = 'https://en.wikipedia.org/w/api.php'
-    for _ in range(5):  # Fetch 5 articles
+    search_terms = ['poultry keeping', 'chicken farming', 'egg production', 'broiler chickens', 'free-range chickens']
+    
+    for _ in range(15):  # Fetch 15 articles
+        search_term = random.choice(search_terms)
         params = {
             'action': 'query',
             'format': 'json',
             'list': 'search',
-            'srsearch': 'chicken',
+            'srsearch': search_term,
             'srlimit': 1,
         }
         response = requests.get(search_url, params=params)
@@ -50,6 +54,31 @@ def generate_chicken_quizzes():
             'question': 'What is the name of a young chicken?',
             'choices': ['Pullet', 'Chick', 'Rooster', 'Hen'],
             'correct_answer': 'Chick'
+        },
+        {
+            'question': 'What is poultry keeping?',
+            'choices': ['Raising birds for meat and eggs', 'Growing crops', 'Fishing', 'Hunting wild animals'],
+            'correct_answer': 'Raising birds for meat and eggs'
+        },
+        {
+            'question': 'Which of the following is a common poultry bird?',
+            'choices': ['Chicken', 'Parrot', 'Eagle', 'Ostrich'],
+            'correct_answer': 'Chicken'
+        },
+        {
+            'question': 'What do poultry birds primarily eat?',
+            'choices': ['Grains', 'Meat', 'Fish', 'Fruits'],
+            'correct_answer': 'Grains'
+        },
+        {
+            'question': 'What is the purpose of a chicken coop?',
+            'choices': ['To house poultry', 'To grow plants', 'To store tools', 'To breed fish'],
+            'correct_answer': 'To house poultry'
+        },
+        {
+            'question': 'Which part of a chicken is commonly used for meat?',
+            'choices': ['Legs', 'Beak', 'Feathers', 'Claws'],
+            'correct_answer': 'Legs'
         }
     ]
     return quizzes
