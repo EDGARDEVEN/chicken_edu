@@ -6,6 +6,7 @@ import Login from './components/Login';
 import ContentList from './components/ContentList';
 import QuizList from './components/QuizList';
 import UserProgress from './components/UserProgress';
+import TimerPage from './components/TimerPage';
 import Logout from './components/Logout';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -17,6 +18,7 @@ import SchoolIcon from '@mui/icons-material/School';
 import QuizIcon from '@mui/icons-material/Quiz';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LoginIcon from '@mui/icons-material/Login';
+import TimerIcon from '@mui/icons-material/Timer';
 import './App.css';
 import './styles/global.css';
 
@@ -76,6 +78,12 @@ function App() {
                                     </IconButton>
                                     User Progress
                                 </Link>
+                                <Link to="/timerpage" className="nav-link">
+                                    <IconButton color="inherit">
+                                        <TimerIcon />
+                                    </IconButton>
+                                    Reminders
+                                </Link>
                                 <Logout />
                             </>
                         )}
@@ -89,6 +97,7 @@ function App() {
                         <PrivateRoute path="/contents" component={ContentList} />
                         <PrivateRoute path="/quizzes" component={QuizList} />
                         <PrivateRoute path="/user_progress" component={UserProgress} />
+                        <PrivateRoute path="/timerpage" component={TimerPage} /> {/* Add TimerPage route */}
                     </Switch>
                 </div>
             </div>
