@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Container, Box, Typography, Card, CardContent } from '@mui/material';
+import { Container, Box, Typography, Card, CardContent, Button } from '@mui/material';
+import Lottie from 'react-lottie';
+import animationData from '../animations/loading.json'; // Add your Lottie animation file here
 import './ContentList.css';
 
 function ContentList() {
     const [contents, setContents] = useState([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         axios.get('http://localhost:5000/api/contents')
@@ -16,24 +20,63 @@ function ContentList() {
             });
     }, []);
 
+    const handleNext = () => {
+        setIsLoading(true);
+        setTimeout(() => {
+            setCurrentIndex(currentIndex + 1);
+            setIsLoading(false);
+        }, 4500); // Adjust the loading time as needed
+    };
+
+    const handleBack = () => {
+        setIsLoading(true);
+        setTimeout(() => {
+            setCurrentIndex(currentIndex - 1);
+            setIsLoading(false);
+        }, 4500); // Adjust the loading time as needed
+    };
+
+    const defaultOptions = {
+        loop: true,
+        autoplay: true,
+        animationData: animationData,
+        rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice'
+        }
+    };
+
     return (
         <Container component="main" maxWidth="md">
-            <Box sx={{ marginTop: 8 }}>
-                <Typography variant="h4" align="center" gutterBottom>
+            <Box sx={{ marginTop: 8, textAlign: 'center' }}>
+                <Typography variant="h4" gutterBottom>
                     Educational Content On Poultry
                 </Typography>
-                {contents.map((content, index) => (
-                    <Card key={index} className="content-card" sx={{ marginBottom: 2 }}>
-                        <CardContent>
-                            <Typography variant="h5" component="div">
-                                {content.title}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary" component="p">
-                                <span dangerouslySetInnerHTML={{ __html: content.body }} />
-                            </Typography>
-                        </CardContent>
-                    </Card>
-                ))}
+                {isLoading ? (
+                    <Lottie options={defaultOptions} height={400} width={400} />
+                ) : (
+                    <>
+                        {contents.length > 0 && (
+                            <Card className="content-card" sx={{ marginBottom: 2 }}>
+                                <CardContent>
+                                    <Typography variant="h5" component="div">
+                                        {contents[currentIndex].title}
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary" component="p">
+                                        <span dangerouslySetInnerHTML={{ __html: contents[currentIndex].body }} />
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        )}
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
+                            <Button variant="contained" color="primary" disabled={currentIndex === 0} onClick={handleBack}>
+                                Back
+                            </Button>
+                            <Button variant="contained" color="primary" disabled={currentIndex === contents.length - 1} onClick={handleNext}>
+                                Next
+                            </Button>
+                        </Box>
+                    </>
+                )}
             </Box>
         </Container>
     );

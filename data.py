@@ -1,4 +1,3 @@
-import random
 import requests
 from app import create_app, db
 from app.models import Content, Quiz
@@ -10,8 +9,7 @@ def fetch_wikipedia_articles():
     search_url = 'https://en.wikipedia.org/w/api.php'
     search_terms = ['poultry keeping', 'chicken farming', 'egg production', 'broiler chickens', 'free-range chickens']
 
-    for _ in range(5):  # Fetch 5 articles
-        search_term = random.choice(search_terms)
+    for search_term in search_terms:  # Iterate through search terms directly
         search_params = {
             'action': 'query',
             'format': 'json',
