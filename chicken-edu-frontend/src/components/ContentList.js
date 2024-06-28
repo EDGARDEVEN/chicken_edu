@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Container, Box, Typography, Card, CardContent, Button } from '@mui/material';
+import { Container, Box, Typography, Button } from '@mui/material';
 import Lottie from 'react-lottie';
 import animationData from '../animations/loading.json'; // Add your Lottie animation file here
 import './ContentList.css';
+import AnimatedCard from './AnimatedCard';
 
 function ContentList() {
     const [contents, setContents] = useState([]);
@@ -56,16 +57,7 @@ function ContentList() {
                 ) : (
                     <>
                         {contents.length > 0 && (
-                            <Card className="content-card" sx={{ marginBottom: 2 }}>
-                                <CardContent>
-                                    <Typography variant="h5" component="div">
-                                        {contents[currentIndex].title}
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary" component="p">
-                                        <span dangerouslySetInnerHTML={{ __html: contents[currentIndex].body }} />
-                                    </Typography>
-                                </CardContent>
-                            </Card>
+                            <AnimatedCard title={contents[currentIndex].title} body={<span dangerouslySetInnerHTML={{ __html: contents[currentIndex].body }} />} />
                         )}
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
                             <Button variant="contained" color="primary" disabled={currentIndex === 0} onClick={handleBack}>

@@ -41,3 +41,36 @@
 .user-progress .MuiListItem-root:hover {
     background-color: #e0e0e0;
 }
+
+.user-progress {
+    text-align: center;
+}
+
+.user-progress .MuiBadge-root {
+    margin-bottom: 16px;
+}
+
+.user-progress .MuiLinearProgress-root {
+    height: 10px;
+    border-radius: 5px;
+}
+
+.user-progress .MuiList-root {
+    margin-top: 20px;
+}
+
+.user-progress .MuiListItem-root {
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.user-progress .MuiListItem-root:hover {
+    background-color: #e0e0e0;
+}
+
+.user-progress .MuiAvatar-root {
+    margin: 0 auto;
+    display: inline-block;
+}
